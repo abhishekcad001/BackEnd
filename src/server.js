@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const databaseConnect = require("./database/index");
 const errorMiddleware = require("./middleware/error");
-// const router = require("./router");
+const router = require("./router");
 const { PORT } = require("./config/config");
 const bodyParser = require("body-parser");
 
