@@ -79,29 +79,38 @@ async function forgetPasswordVerifyEmail(req, res, next) {
                 res.status(200).json({ statusCode: 200, success: true, message: "Otp send your email" });
             },
         );
-    } catch (e) {
-        next(new ApiError(400, e.message));
+    } catch (error) {
+        next(new ApiError(400, error.message));
     }
 }
 
 async function verifyOtpForgetPwd(req, res, next) {
     try {
-        const { email, otp, newPassword } = req.body;
-        const findOtp = await OtpModel.findOne({ email });
+        const { otp } = req.body;
+        const findOtp = await OtpModel.findOne({ otp });
         if (!findOtp) {
             return next(new ApiError(400, "Otp Expired"));
         } else {
-            const hashPwd = hashPassword(newPassword);
-            const newPwdSet = await UserModel.updateOne({ email: email }, { $set: { password: hashPwd } });
+            res.status(200).json({ statusCode: 200, success: true, message: "Otp verify successfully" });
         }
-        if (findOtp.otp !== otp) {
-            return next(new ApiError(400, "Otp is wrong"));
-        }
-        await OtpModel.deleteMany({ email: email });
-        res.status(200).json({ statusCode: 200, success: true, message: "Password change successfully" });
-    } catch (e) {
-        next(new ApiError(400, e.message));
+    } catch (error) {
+        next(new ApiError(400, error.message));
     }
 }
 
-module.exports = { createUser, login, forgetPasswordVerifyEmail, verifyOtpForgetPwd };
+async function newPasswordForgetPwd(req, res, next) {
+    try {
+        const { email, newPassword } = req.body;
+        const findEmail = await UserModel.findOne({ email });
+        if (!findEmail) {
+            return next(new ApiError(400, "Email not exist"));
+        } else {
+            const hashPwd = hashPassword(newPassword);
+            const newPwdSet = await UserModel.updateOne({ email: email }, { $set: { password: hashPwd } });
+            res.status(200).json({ statusCode: 200, success: true, message: "Password update successfully" });
+        }
+    } catch (error) {
+        next(new ApiError(400, error.message));
+    }
+}
+module.exports = { createUser, login, forgetPasswordVerifyEmail, verifyOtpForgetPwd, newPasswordForgetPwd };
