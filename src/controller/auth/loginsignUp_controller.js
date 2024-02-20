@@ -94,7 +94,7 @@ async function verifyOtpForgetPwd(req, res, next) {
             res.status(200).json({ statusCode: 200, success: true, message: "Otp verify successfully" });
         }
     } catch (error) {
-        next(new ApiError(400, error.message));
+        next(new ApiError(400, error.message))
     }
 }
 
