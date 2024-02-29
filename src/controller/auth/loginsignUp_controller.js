@@ -61,7 +61,6 @@ async function login(req, res, next) {
               token: token,
               role: ADMIN_ROLE
             });
-       
       }
       return next(new ApiError(401, "Email not exist"));
     }

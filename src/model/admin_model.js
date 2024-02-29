@@ -22,12 +22,12 @@ const adminSchema = new Schema({
     },
 });
 
-adminSchema.pre("save", function (next) {
-    if (this.isModified(["password"])) {
-        this.password = hashPassword(this.password);
-    }
-    next();
-});
+// adminSchema.pre("save", function (next) {
+//     if (this.isModified(["password"])) {
+//         this.password = hashPassword(this.password);
+//     }
+//     next();
+// });
 const AdminModel = model("admin", adminSchema);
 
 module.exports = AdminModel;
