@@ -5,6 +5,7 @@ const UserModel = require("../model/user_model");
 const cloudinary = require("../utils/cloudinary");
 const fs = require("fs");
 const path = require("path");
+const ApiError = require("../utils/error");
 
 async function viewAllUsers(req, res, next) {
   try {
@@ -16,6 +17,7 @@ async function viewAllUsers(req, res, next) {
 }
 
 async function addHome(req, res, next) {
+   debugger
   try {
     const homeValidation = addHomeValidation.validate(req.body);
     if (homeValidation.error) {
