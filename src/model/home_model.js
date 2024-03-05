@@ -4,8 +4,14 @@ const cloudinary = require("../utils/cloudinary");
 const homeSchema = new Schema(
     {
         photos: {
-            type: Array,
-            require: true,
+            type: [
+                {
+                    url: { type: String },
+                    publicId: { type: String },
+                },
+            ],
+            default: [],
+            required: true,
         },
         title: {
             type: String,
@@ -28,6 +34,19 @@ const homeSchema = new Schema(
             type: String,
             required: true,
         },
+        //      address: {
+        //       type: {
+        //           home_no: {
+        //               type: Number,
+        //               required: true,
+        //           },
+        //           street_name: {
+        //               type: String,
+        //               required: true,
+        //           },
+        //       },
+        //       unique: true,
+        //   },
         country: {
             type: String,
             required: true,
@@ -109,10 +128,6 @@ const homeSchema = new Schema(
         isActive: {
             type: Boolean,
             default: false,
-        },
-        publicId: {
-            type: String,
-            required: true,
         },
     },
     {

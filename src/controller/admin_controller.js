@@ -2,7 +2,7 @@ const { addHomeValidation } = require("../config/joi.validation");
 const { USER_ROLE, ADMIN_ROLE } = require("../config/string");
 const HomeModel = require("../model/home_model");
 const UserModel = require("../model/user_model");
-const cloudinary = require("../utils/cloudinary");
+const { multipleImageUpload } = require("../utils/cloudinary");
 const fs = require("fs");
 const path = require("path");
 const ApiError = require("../utils/error");
@@ -23,15 +23,14 @@ async function addHome(req, res, next) {
     if (homeValidation.error) {
       return next(new ApiError(403, homeValidation.error.details[0].message));
     }
-    const file = req.file;
+    const file = req.files;
     if (!file) {
       return next(new ApiError(403, "Home photos ares required"));
     }
-    const path = file.path;
-    const result = await cloudinary.uploader.upload(path);
-    req.body.photos = result.secure_url;
-    req.body.publicId = result.public_id;
-    fs.unlinkSync(path);
+    const result = await multipleImageUpload(file.map((e)=>e.path))
+    req.body.photos = result.map((e) => {
+      return { url: e.secure_url, publicId: e.public_id }
+  });
     const home = new HomeModel(req.body);
     await home.save();
     res.status(201).json({ success: true, message: "New home listed" });

@@ -40,7 +40,7 @@ async function login(req, res, next) {
     if (findUser) {
       const comparePass = compareHash(password, findUser.password);
       if (comparePass == true) {
-        const token = createToken({ id: findUser._id, role: USER_ROLE });
+        const token = createToken({ id: findUser._id, role: USER_ROLE,...findUser });
         res
           .status(200)
           .json({ success: true, message: "login successfully", token: token,role: USER_ROLE });
