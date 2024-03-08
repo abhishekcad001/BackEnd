@@ -15,7 +15,7 @@ const addHomeValidation=Joi.object().keys({
     price:Joi.number().integer().required(),
     // price_After_Tax:,
     photos:Joi.string(),
-    address:Joi.string().required(),
+    address:Joi.any().required(),
    //  address:{
    //    type:{
    //       house_no:Joi.number().required(),
