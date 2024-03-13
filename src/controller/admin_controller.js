@@ -42,8 +42,6 @@ async function addHome(req, res, next) {
 async function updateHome(req, res, next) {
     try {
         const id = req.params.id;
-        console.log(id,"idid")
-        console.log(req.body,"body")
         if (req.file) {
             const result = await multipleImageUpload(file.map((e) => e.path));
             req.body.photos = result.map((e) => {
