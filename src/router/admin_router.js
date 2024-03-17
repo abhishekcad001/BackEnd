@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { verifyUser } = require("../middleware/verify_user");
-const {viewAllUsers,addHome, updateHome, deleteHome, viewAllList}=require("../controller/admin_controller");
+const {viewAllUsers,addHome, updateHome, deleteHome, viewAllList, getAllListerRequest}=require("../controller/admin_controller");
 const { USER_ROLE, ADMIN_ROLE } = require("../config/string");
 const multer = require("../middleware/multer");
 
@@ -10,5 +10,6 @@ router.post("/addHome",verifyUser(ADMIN_ROLE),  multer.array("photos",9),addHome
 router.put("/updateHome/:id",verifyUser(ADMIN_ROLE), multer.array("photos",9),updateHome);   
 router.delete("/deleteHome/:id",verifyUser(ADMIN_ROLE),deleteHome);   
 router.get("/view_All_List",verifyUser(ADMIN_ROLE),viewAllList);   
+router.get("/view_All_Lister",verifyUser(ADMIN_ROLE),getAllListerRequest);   
 
 module.exports = router;

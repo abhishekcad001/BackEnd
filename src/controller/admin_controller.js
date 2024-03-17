@@ -6,6 +6,7 @@ const { multipleImageUpload } = require("../utils/cloudinary");
 const fs = require("fs");
 const path = require("path");
 const ApiError = require("../utils/error");
+const ListerModel = require("../model/lister_model");
 
 async function viewAllUsers(req, res, next) {
     try {
@@ -67,9 +68,19 @@ async function deleteHome(req, res, next) {
 async function viewAllList(req, res, next) {
     try {
         const allHomes = await HomeModel.find();
-        res.status(201).json({ success: true, data: allHomes, message: "list of data" });
+        res.status(200).json({ success: true, data: allHomes, message: "list of data" });
     } catch (error) {
         next(new ApiError(400, error.message));
     }
 }
-module.exports = { viewAllUsers, addHome, updateHome, deleteHome, viewAllList };
+
+async function getAllListerRequest(req,res,next)
+{
+try {
+   const listerRequest=await ListerModel.find()
+   res.status(200).json({success:true,data:listerRequest,message:"list of to became lister"})
+} catch (error) {
+   next(new ApiError(400,error.message))
+}
+}
+module.exports = { viewAllUsers, addHome, updateHome, deleteHome, viewAllList,getAllListerRequest };

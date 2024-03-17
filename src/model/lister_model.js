@@ -40,7 +40,7 @@ const listerSchema = new Schema(
             required: true,
         },
         link: {
-         type: String,
+            type: String,
             required: true,
         },
     },
@@ -60,5 +60,3 @@ const listerSchema = new Schema(
 const ListerModel = new model("lister", listerSchema);
 
 module.exports = ListerModel;
-
-

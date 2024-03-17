@@ -42,7 +42,7 @@ const addHomeValidation = Joi.object().keys({
     publicId: Joi.string(),
 });
 
-const becameListerValidation = Joi.object.keys({
+const becameListerValidation = Joi.object().keys({
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
     email: Joi.string().email().required(),
