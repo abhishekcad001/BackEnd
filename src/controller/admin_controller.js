@@ -19,7 +19,17 @@ async function viewAllUsers(req, res, next) {
 }
 
 async function addHome(req, res, next) {
+    debugger;
     try {
+        const id = req.id;
+        if (req.role === USER_ROLE) {
+            console.log(id);
+            const findStatus = await ListerModel.find({ _id: id, request_status: "approved" });
+            console.log(findStatus);
+            if (!findStatus) {
+                return next(new ApiError(403, "You are not approved as a lister"));
+            }
+        }
         const homeValidation = addHomeValidation.validate(req.body);
         if (homeValidation.error) {
             return next(new ApiError(403, homeValidation.error.details[0].message));
