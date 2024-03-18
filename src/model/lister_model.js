@@ -43,6 +43,11 @@ const listerSchema = new Schema(
             type: String,
             required: true,
         },
+        request_status: {
+            type: String,
+            default: "pending",
+            enum: ["pending", "approved", "rejected"]
+        },
     },
     {
         timestamps: true,

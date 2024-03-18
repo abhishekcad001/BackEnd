@@ -7,6 +7,7 @@ const fs = require("fs");
 const path = require("path");
 const ApiError = require("../utils/error");
 const ListerModel = require("../model/lister_model");
+const transporter = require("../utils/transporter");
 
 async function viewAllUsers(req, res, next) {
     try {
@@ -18,7 +19,6 @@ async function viewAllUsers(req, res, next) {
 }
 
 async function addHome(req, res, next) {
-    debugger;
     try {
         const homeValidation = addHomeValidation.validate(req.body);
         if (homeValidation.error) {
@@ -57,9 +57,9 @@ async function updateHome(req, res, next) {
 }
 async function deleteHome(req, res, next) {
     try {
-      const id = req.params.id;
-      const home = await HomeModel.findByIdAndDelete({ _id: id });
-      res.status(201).json({ success: true, data: home, message: "details delete successfully" });
+        const id = req.params.id;
+        const home = await HomeModel.findByIdAndDelete({ _id: id });
+        res.status(201).json({ success: true, data: home, message: "details delete successfully" });
     } catch (error) {
         next(new ApiError(400, error.message));
     }
@@ -74,13 +74,45 @@ async function viewAllList(req, res, next) {
     }
 }
 
-async function getAllListerRequest(req,res,next)
-{
-try {
-   const listerRequest=await ListerModel.find()
-   res.status(200).json({success:true,data:listerRequest,message:"list of to became lister"})
-} catch (error) {
-   next(new ApiError(400,error.message))
+async function getAllListerRequest(req, res, next) {
+    try {
+        const listerRequest = await ListerModel.find();
+        res.status(200).json({ success: true, data: listerRequest, message: "list of to became lister" });
+    } catch (error) {
+        next(new ApiError(400, error.message));
+    }
 }
+
+async function updateListerStatus(req, res, next) {
+    try {
+        const id = req.params.id;
+        const findLister = await ListerModel.findByIdAndUpdate({ _id: id }, { $set: { request_status: req.body.request_status } }, { new: true });
+
+        const email = findLister.email;
+        const filePath = path.join(__dirname, "../../public/status.html");
+        let htmlData = fs.readFileSync(filePath, "utf-8");
+        const status = findLister.request_status;
+        htmlData = htmlData.replace("${status}", status);
+        transporter.sendMail(
+            {
+                to: email,
+                subject: "update status",
+                html: htmlData,
+            },
+            async (err, _result) => {
+                if (err) {
+                    return next(new ApiError(400, err.message));
+                }
+
+                res.status(200).json({
+                    statusCode: 200,
+                    success: true,
+                    message: "request_status send to  your email",
+                });
+            },
+        );
+    } catch (error) {
+        next(new ApiError(400, error.message));
+    }
 }
-module.exports = { viewAllUsers, addHome, updateHome, deleteHome, viewAllList,getAllListerRequest };
+module.exports = { viewAllUsers, addHome, updateHome, deleteHome, viewAllList, getAllListerRequest, updateListerStatus };
