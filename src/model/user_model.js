@@ -21,7 +21,8 @@ const userSchema = new Schema({
         required: true,
     },
     isLister:{
-      type:Boolean
+      type:Boolean,
+      default:false
     }
 }, {
     timestamps: true,

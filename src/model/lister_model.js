@@ -2,6 +2,10 @@ const { Schema, model } = require("mongoose");
 
 const listerSchema = new Schema(
     {
+      userId:{
+         type: Schema.Types.ObjectId,
+         ref: "user",
+      },
         firstName: {
             type: String,
             required: true,

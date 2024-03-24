@@ -19,15 +19,17 @@ async function viewAllUsers(req, res, next) {
 }
 
 async function addHome(req, res, next) {
-    debugger;
     try {
         const id = req.id;
+        const role = req.role;
         if (req.role === USER_ROLE) {
             console.log(id);
-            const findStatus = await ListerModel.find({ _id: id, request_status: "approved" });
+            const findStatus = await ListerModel.find({ userId: id, request_status: "approved" });
             console.log(findStatus);
-            if (!findStatus) {
+            if (findStatus.length === 0) {
                 return next(new ApiError(403, "You are not approved as a lister"));
+            } else {
+                const updateLister = await UserModel.findByIdAndUpdate({ _id: id }, { $set: { isLister: true } }, { new: true });
             }
         }
         const homeValidation = addHomeValidation.validate(req.body);
@@ -42,7 +44,10 @@ async function addHome(req, res, next) {
         req.body.photos = result.map((e) => {
             return { url: e.secure_url, publicId: e.public_id };
         });
-        const home = new HomeModel(req.body);
+        const home = new HomeModel({
+            ...req.body,
+            role: role,
+        });
         await home.save();
         res.status(201).json({ success: true, message: "New home listed" });
     } catch (error) {
@@ -68,7 +73,7 @@ async function updateHome(req, res, next) {
 async function deleteHome(req, res, next) {
     try {
         const id = req.params.id;
-        const home = await HomeModel.findByIdAndDelete({ _id: id });
+        const home = await HomeModel.findByIdAndUpdate({ _id: id }, { $set: { isActive: false } }, { new: true });
         res.status(201).json({ success: true, data: home, message: "details delete successfully" });
     } catch (error) {
         next(new ApiError(400, error.message));
@@ -96,7 +101,7 @@ async function getAllListerRequest(req, res, next) {
 async function updateListerStatus(req, res, next) {
     try {
         const id = req.params.id;
-        const findLister = await ListerModel.findByIdAndUpdate({ _id: id }, { $set: { request_status: req.body.request_status } }, { new: true });
+        const findLister = await ListerModel.findOneAndUpdate({ _id: id }, { $set: { request_status: req.body.request_status } }, { new: true });
 
         const email = findLister.email;
         const filePath = path.join(__dirname, "../../public/status.html");
@@ -125,4 +130,13 @@ async function updateListerStatus(req, res, next) {
         next(new ApiError(400, error.message));
     }
 }
-module.exports = { viewAllUsers, addHome, updateHome, deleteHome, viewAllList, getAllListerRequest, updateListerStatus };
+
+async function viewAllLister(req, res, next) {
+    try {
+        const lister = await HomeModel.find({ role: "User" });
+        res.status(200).json({ success: true, data: lister });
+    } catch (error) {
+        next(new ApiError(error.message));
+    }
+}
+module.exports = { viewAllUsers, addHome, updateHome, deleteHome, viewAllList, getAllListerRequest, updateListerStatus, viewAllLister };

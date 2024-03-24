@@ -127,8 +127,11 @@ const homeSchema = new Schema(
         },
         isActive: {
             type: Boolean,
-            default: false,
+            default: true,
         },
+        role:{
+         type:String
+        }
     },
     {
         timestamps: true,
