@@ -82,7 +82,7 @@ async function deleteHome(req, res, next) {
 
 async function viewAllList(req, res, next) {
     try {
-        const allHomes = await HomeModel.find();
+        const allHomes = await HomeModel.find({isActive:true});
         res.status(200).json({ success: true, data: allHomes, message: "list of data" });
     } catch (error) {
         next(new ApiError(400, error.message));
