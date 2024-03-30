@@ -2,12 +2,12 @@ const { Schema, model } = require("mongoose");
 const { hashPassword } = require("../utils/hash");
 
 const userSchema = new Schema({
-   
+
     firstName: {
         type: String,
         required: true,
     },
-   
+
     lastName: {
         type: String,
         required: true,
@@ -20,9 +20,13 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    isLister:{
-      type:Boolean,
-      default:false
+    isLister: {
+        type: Boolean,
+        default: false
+    },
+    isActive: {
+        type: Boolean,
+        default: true
     }
 }, {
     timestamps: true,

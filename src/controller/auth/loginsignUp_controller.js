@@ -37,16 +37,23 @@ async function login(req, res, next) {
     try {
         const { email, password } = req.body;
         const findUser = await UserModel.findOne({ email });
+        debugger
         if (findUser) {
-            const comparePass = compareHash(password, findUser.password);
-            if (comparePass == true) {
-                const token = createToken({ id: findUser._id, role: USER_ROLE, ...findUser.toObject() });
-                res.status(200).json({ success: true, message: "login successfully", token: token, role: USER_ROLE });
+            const userActive = await UserModel.findOne({ email: email, isActive: true })
+            if (userActive) {
+                const comparePass = compareHash(password, findUser.password);
+                if (comparePass == true) {
+                    const token = createToken({ id: findUser._id, role: USER_ROLE, ...findUser.toObject() });
+                    res.status(200).json({ success: true, message: "login successfully", token: token, role: USER_ROLE });
+                } else {
+                    return next(new ApiError(401, "Password is wrong"));
+                }
             } else {
-                return next(new ApiError(401, "Password is wrong"));
+                return next(new ApiError(401, "You aren't user anymore!!"));
+
             }
+
         } else {
-            debugger;
             const findAdmin = await AdminModel.findOne({ email });
             if (findAdmin) {
                 const token = createToken({ id: findAdmin._id, role: ADMIN_ROLE });

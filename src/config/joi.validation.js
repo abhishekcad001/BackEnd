@@ -35,10 +35,6 @@ const addHomeValidation = Joi.object().keys({
     roofing: Joi.string().required(),
     floor_no: Joi.number().integer().required(),
     available_from: Joi.date().required(),
-    interior_details: Joi.array().required(),
-    outdoor_details: Joi.array().required(),
-    utilities: Joi.array().required(),
-    other_features: Joi.array().required(),
     publicId: Joi.string(),
 });
 
