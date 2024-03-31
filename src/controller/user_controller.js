@@ -3,6 +3,7 @@ const { becameListerValidation } = require("../config/joi.validation");
 const ListerModel = require("../model/lister_model");
 // const UserModel = require("../model/user_model");
 const ApiError = require("../utils/error");
+const HomeModel = require("../model/home_model");
 
 async function becameLister(req, res, next) {
     try {
@@ -23,6 +24,16 @@ async function becameLister(req, res, next) {
     }
 }
 
+async function singleList(req, res, next) {
+    try {
+        const id = req.params.id;
+        const findList = await HomeModel.findById({ _id: id });
+        res.status(200).json({ success: true, data: findList });
+    } catch (error) {
+        next(new ApiError(error.message));
+    }
+}
 module.exports = {
     becameLister,
+    singleList,
 };
