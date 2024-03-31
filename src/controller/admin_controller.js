@@ -10,9 +10,10 @@ const ListerModel = require("../model/lister_model");
 const transporter = require("../utils/transporter");
 
 async function viewAllUsers(req, res, next) {
+    debugger
     try {
-        const allUsers = await UserModel.find();
-        res.status(201).json({ success: true, data: allUsers });
+        const allUsers = await UserModel.find({ isActive: true });
+        res.status(200).json({ success: true, data: allUsers });
     } catch (error) {
         next(new ApiError(400, error.message));
     }
@@ -81,13 +82,40 @@ async function deleteHome(req, res, next) {
 }
 
 async function viewAllList(req, res, next) {
+    const page = parseInt(req.query.page) || 1
+    const limit = parseInt(req.query.limit) || 10
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
     try {
-        const allHomes = await HomeModel.find({isActive:true});
-        res.status(200).json({ success: true, data: allHomes, message: "list of data" });
+        const totalDocuments = await HomeModel.countDocuments({ isActive: true });
+
+        const allHomes = await HomeModel.find({ isActive: true })
+            .limit(limit)
+            .skip(startIndex);
+
+        // Pagination result object
+        const paginationResult = {};
+        if (endIndex < totalDocuments) {
+            paginationResult.next = {
+                page: page + 1,
+                limit: limit
+            };
+        }
+        if (startIndex > 0) {
+            paginationResult.previous = {
+                page: page - 1,
+                limit: limit
+            };
+        }
+
+        res.status(200).json({ success: true, data: allHomes, pagination: paginationResult, message: "List of data" });
     } catch (error) {
         next(new ApiError(400, error.message));
     }
 }
+
 
 async function getAllListerRequest(req, res, next) {
     try {
@@ -139,4 +167,14 @@ async function viewAllLister(req, res, next) {
         next(new ApiError(error.message));
     }
 }
-module.exports = { viewAllUsers, addHome, updateHome, deleteHome, viewAllList, getAllListerRequest, updateListerStatus, viewAllLister };
+
+async function deleteUser(req, res, next) {
+    try {
+        const id = req.params.id
+        const deleteUser = await UserModel.findByIdAndUpdate({ _id: id }, { $set: { isActive: false } }, { new: true })
+        res.status(201).json({ success: true, data: deleteUser, message: "User delete successfully" });
+    } catch (error) {
+        next(new ApiError(error.message))
+    }
+}
+module.exports = { viewAllUsers, addHome, updateHome, deleteHome, viewAllList, getAllListerRequest, updateListerStatus, viewAllLister, deleteUser };

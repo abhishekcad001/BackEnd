@@ -109,22 +109,6 @@ const homeSchema = new Schema(
             type: Date,
             default: Date.now(),
         },
-        interior_details: {
-            type: Array,
-            required: true,
-        },
-        outdoor_details: {
-            type: Array,
-            required: true,
-        },
-        utilities: {
-            type: Array,
-            required: true,
-        },
-        other_features: {
-            type: Array,
-            required: true,
-        },
         isActive: {
             type: Boolean,
             default: true,
