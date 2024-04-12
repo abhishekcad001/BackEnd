@@ -138,7 +138,7 @@ async function updateListerStatus(req, res, next) {
         transporter.sendMail(
             {
                 to: email,
-                subject: "update status",
+                subject: "Congratulation You Are a Lister Now - ListaGram",
                 html: htmlData,
             },
             async (err, _result) => {
