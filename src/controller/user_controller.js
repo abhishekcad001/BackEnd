@@ -128,7 +128,7 @@ module.exports = {
     filterData,
     addToWishList,
     removeWishList,
-module.exports = {
+
     becameLister,
     singleList,
 };
