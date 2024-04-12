@@ -8,9 +8,10 @@ const path = require("path");
 const ApiError = require("../utils/error");
 const ListerModel = require("../model/lister_model");
 const transporter = require("../utils/transporter");
+const WishListModel = require("../model/wishList_model");
 
 async function viewAllUsers(req, res, next) {
-    debugger
+    debugger;
     try {
         const allUsers = await UserModel.find({ isActive: true });
         res.status(200).json({ success: true, data: allUsers });
@@ -82,8 +83,8 @@ async function deleteHome(req, res, next) {
 }
 
 async function viewAllList(req, res, next) {
-    const page = parseInt(req.query.page) || 1
-    const limit = parseInt(req.query.limit) || 10
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
@@ -91,22 +92,20 @@ async function viewAllList(req, res, next) {
     try {
         const totalDocuments = await HomeModel.countDocuments({ isActive: true });
 
-        const allHomes = await HomeModel.find({ isActive: true })
-            .limit(limit)
-            .skip(startIndex);
+        const allHomes = await HomeModel.find({ isActive: true }).limit(limit).skip(startIndex);
 
         // Pagination result object
         const paginationResult = {};
         if (endIndex < totalDocuments) {
             paginationResult.next = {
                 page: page + 1,
-                limit: limit
+                limit: limit,
             };
         }
         if (startIndex > 0) {
             paginationResult.previous = {
                 page: page - 1,
-                limit: limit
+                limit: limit,
             };
         }
 
@@ -116,11 +115,11 @@ async function viewAllList(req, res, next) {
     }
 }
 
-
 async function getAllListerRequest(req, res, next) {
     try {
         const listerRequest = await ListerModel.find();
-        res.status(200).json({ success: true, data: listerRequest, message: "list of to became lister" });
+        const filteredRequests = listerRequest.filter((e) => e.request_status != "rejected");
+        res.status(200).json({ success: true, data: filteredRequests, message: "List of requests to become lister" });
     } catch (error) {
         next(new ApiError(400, error.message));
     }
@@ -170,11 +169,21 @@ async function viewAllLister(req, res, next) {
 
 async function deleteUser(req, res, next) {
     try {
-        const id = req.params.id
-        const deleteUser = await UserModel.findByIdAndUpdate({ _id: id }, { $set: { isActive: false } }, { new: true })
+        const id = req.params.id;
+        const deleteUser = await UserModel.findByIdAndUpdate({ _id: id }, { $set: { isActive: false } }, { new: true });
         res.status(201).json({ success: true, data: deleteUser, message: "User delete successfully" });
     } catch (error) {
-        next(new ApiError(error.message))
+        next(new ApiError(error.message));
     }
 }
-module.exports = { viewAllUsers, addHome, updateHome, deleteHome, viewAllList, getAllListerRequest, updateListerStatus, viewAllLister, deleteUser };
+
+async function getWishList(req, res, next) {
+    try {
+        const allWishList = await WishListModel.find().populate("homeId").populate("user");
+        const filterData = allWishList.filter((e) => e.isWishList === true);
+        res.status(200).json({ success: true, data: filterData });
+    } catch (error) {
+        next(new ApiError(error.message));
+    }
+}
+module.exports = { viewAllUsers, addHome, updateHome, deleteHome, viewAllList, getAllListerRequest, updateListerStatus, viewAllLister, deleteUser, getWishList };
