@@ -1,6 +1,10 @@
 const { Router } = require("express");
 const { verifyUser } = require("../middleware/verify_user");
+<<<<<<< HEAD
 const {viewAllUsers,addHome, updateHome, deleteHome, viewAllList, getAllListerRequest, updateListerStatus, viewAllLister, deleteUser, getWishList, getMemberShipDetail}=require("../controller/admin_controller");
+=======
+const {viewAllUsers,addHome, updateHome, deleteHome, viewAllList, getAllListerRequest, updateListerStatus, viewAllLister, deleteUser, getWishList}=require("../controller/admin_controller");
+>>>>>>> 659a8e7b2ab2e84141a0838cb8bceb054d13d1fd
 const { USER_ROLE, ADMIN_ROLE } = require("../config/string");
 const multer = require("../middleware/multer");
 
@@ -14,8 +18,12 @@ router.get("/view_All_ListerRequest",verifyUser(ADMIN_ROLE),getAllListerRequest)
 router.put("/update/lister_status/:id",verifyUser(ADMIN_ROLE),updateListerStatus);   
 router.get("/view_All_Lister",verifyUser(ADMIN_ROLE),viewAllLister);   
 router.delete("/deleteUser/:id",verifyUser(ADMIN_ROLE),deleteUser);   
+<<<<<<< HEAD
 router.get("/allWishList",verifyUser(ADMIN_ROLE),getWishList);  
 router.get("/memberShip/Details",verifyUser(ADMIN_ROLE),getMemberShipDetail);  
 
+=======
+router.get("/allWishList",verifyUser(ADMIN_ROLE),getWishList);   
+>>>>>>> 659a8e7b2ab2e84141a0838cb8bceb054d13d1fd
 
 module.exports = router;
