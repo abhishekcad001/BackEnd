@@ -9,6 +9,9 @@ const ApiError = require("../utils/error");
 const ListerModel = require("../model/lister_model");
 const transporter = require("../utils/transporter");
 const WishListModel = require("../model/wishList_model");
+
+const MemberShipModel = require("../model/memberShip_model");
+
 const MemberShipModel = require("../model/memberShip_model");
 
 async function viewAllUsers(req, res, next) {
@@ -139,7 +142,7 @@ async function updateListerStatus(req, res, next) {
         transporter.sendMail(
             {
                 to: email,
-                subject: "update status",
+                subject: "Congratulation You Are a Lister Now - ListaGram",
                 html: htmlData,
             },
             async (err, _result) => {
@@ -187,6 +190,7 @@ async function getWishList(req, res, next) {
         next(new ApiError(error.message));
     }
 }
+
 async function getMemberShipDetail(req, res, next) {
     try {
         const allMemberShip = await MemberShipModel.find().populate("user");
@@ -196,3 +200,4 @@ async function getMemberShipDetail(req, res, next) {
     }
 }
 module.exports = { viewAllUsers, addHome, updateHome, deleteHome, viewAllList, getAllListerRequest, updateListerStatus, viewAllLister, deleteUser, getWishList, getMemberShipDetail };
+

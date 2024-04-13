@@ -5,8 +5,13 @@ const ListerModel = require("../model/lister_model");
 const ApiError = require("../utils/error");
 const HomeModel = require("../model/home_model");
 const WishListModel = require("../model/wishList_model");
+
 const MemberShipModel = require("../model/memberShip_model");
 const UserModel = require("../model/user_model");
+
+const MemberShipModel = require("../model/memberShip_model");
+const UserModel = require("../model/user_model");
+
 
 async function becameLister(req, res, next) {
     try {
@@ -107,6 +112,9 @@ async function filterData(req, res, next) {
 async function addToWishList(req, res, next) {
     try {
         const wishListProduct = new WishListModel({ user: req.id, ...req.body });
+
+        console.log(wishListProduct, "wishListProduct");
+
         await wishListProduct.save();
         res.status(201).json({ success: true, data: wishListProduct, message: "Add to wishlist..!" });
     } catch (error) {
@@ -123,6 +131,7 @@ async function removeWishList(req, res, next) {
         next(new ApiError(error.message));
     }
 }
+
 async function getWishList(req, res, next) {
     try {
         const id = req.id;
@@ -150,12 +159,23 @@ async function getMemberShip(req, res, next) {
         next(new ApiError(error.message));
     }
 }
+
+
 module.exports = {
     becameLister,
     singleList,
     filterData,
     addToWishList,
     removeWishList,
+
     getWishList,
     getMemberShip,
+
+    getWishList,
+    getMemberShip,
+
+
+    becameLister,
+    singleList,
+
 };

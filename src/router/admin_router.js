@@ -1,6 +1,12 @@
 const { Router } = require("express");
 const { verifyUser } = require("../middleware/verify_user");
+
 const {viewAllUsers,addHome, updateHome, deleteHome, viewAllList, getAllListerRequest, updateListerStatus, viewAllLister, deleteUser, getWishList, getMemberShipDetail}=require("../controller/admin_controller");
+
+const {viewAllUsers,addHome, updateHome, deleteHome, viewAllList, getAllListerRequest, updateListerStatus, viewAllLister, deleteUser, getWishList, getMemberShipDetail}=require("../controller/admin_controller");
+
+const {viewAllUsers,addHome, updateHome, deleteHome, viewAllList, getAllListerRequest, updateListerStatus, viewAllLister, deleteUser, getWishList}=require("../controller/admin_controller");
+
 const { USER_ROLE, ADMIN_ROLE } = require("../config/string");
 const multer = require("../middleware/multer");
 
@@ -16,6 +22,7 @@ router.get("/view_All_Lister",verifyUser(ADMIN_ROLE),viewAllLister);
 router.delete("/deleteUser/:id",verifyUser(ADMIN_ROLE),deleteUser);   
 router.get("/allWishList",verifyUser(ADMIN_ROLE),getWishList);  
 router.get("/memberShip/Details",verifyUser(ADMIN_ROLE),getMemberShipDetail);  
-
-
+router.get("/allWishList",verifyUser(ADMIN_ROLE),getWishList);  
+router.get("/memberShip/Details",verifyUser(ADMIN_ROLE),getMemberShipDetail);  
+router.get("/allWishList",verifyUser(ADMIN_ROLE),getWishList);   
 module.exports = router;
