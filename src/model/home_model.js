@@ -27,26 +27,12 @@ const homeSchema = new Schema(
         },
         price_After_Tax: {
             type: Number,
-            // require:true,
         },
 
         address: {
             type: String,
             required: true,
         },
-        //      address: {
-        //       type: {
-        //           home_no: {
-        //               type: Number,
-        //               required: true,
-        //           },
-        //           street_name: {
-        //               type: String,
-        //               required: true,
-        //           },
-        //       },
-        //       unique: true,
-        //   },
         country: {
             type: String,
             required: true,
