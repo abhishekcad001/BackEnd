@@ -9,9 +9,6 @@ const WishListModel = require("../model/wishList_model");
 const MemberShipModel = require("../model/memberShip_model");
 const UserModel = require("../model/user_model");
 
-const MemberShipModel = require("../model/memberShip_model");
-const UserModel = require("../model/user_model");
-
 
 async function becameLister(req, res, next) {
     try {

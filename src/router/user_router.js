@@ -4,10 +4,7 @@ const { verifyUser } = require("../middleware/verify_user");
 
 const { becameLister, singleList, filterData, addToWishList, removeWishList, getWishList, getMemberShip } = require("../controller/user_controller");
 
-const { becameLister, singleList, filterData, addToWishList, removeWishList, getWishList, getMemberShip } = require("../controller/user_controller");
 
-const { becameLister, singleList, filterData, addToWishList, removeWishList } = require("../controller/user_controller");
-const { becameLister, singleList } = require("../controller/user_controller");
 
 const { addHome, viewAllList } = require("../controller/admin_controller");
 const multer = require("../middleware/multer");

@@ -12,7 +12,7 @@ const WishListModel = require("../model/wishList_model");
 
 const MemberShipModel = require("../model/memberShip_model");
 
-const MemberShipModel = require("../model/memberShip_model");
+
 
 async function viewAllUsers(req, res, next) {
     debugger;
